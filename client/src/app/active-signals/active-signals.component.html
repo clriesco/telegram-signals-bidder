@@ -1,0 +1,74 @@
+<div class="signal">
+
+    <h2>Órdenes Activas</h2>
+  
+    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+        <mat-spinner></mat-spinner>
+    </div>
+  
+    <mat-table class="signals-table mat-elevation-z8" [dataSource]="dataSource" matSort matSortActive="creation_date" matSortDirection="desc" matSortDisableClear>
+        <ng-container matColumnDef="creation_date">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+            <mat-cell *matCellDef="let signal">{{signal.creation_date | amLocal | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}</mat-cell>
+        </ng-container>
+                
+        <ng-container matColumnDef="currency">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Moneda</mat-header-cell>
+            <mat-cell *matCellDef="let signal">{{signal.currency}}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="commodity">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Base</mat-header-cell>
+            <mat-cell *matCellDef="let signal">{{signal.commodity}}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="price">
+            <mat-header-cell *matHeaderCellDef>Precio de apertura</mat-header-cell>
+            <mat-cell class="price-cell" *matCellDef="let signal">{{signal.price}}</mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="current_price">
+            <mat-header-cell *matHeaderCellDef>Precio Actual</mat-header-cell>
+            <mat-cell class="close-price-cell" *matCellDef="let signal">{{signal.current_price}}</mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="percent">
+            <mat-header-cell *matHeaderCellDef>Porcentaje</mat-header-cell>
+            <mat-cell class="percent-cell" *matCellDef="let signal">{{signal.percent |  number: "1.2-2"}}%</mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="time">
+            <mat-header-cell *matHeaderCellDef>Tiempo</mat-header-cell>
+            <mat-cell class="time-cell" *matCellDef="let signal">{{signal.time}}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="chart">
+            <mat-header-cell *matHeaderCellDef>Gráfica</mat-header-cell>
+            <mat-cell *matCellDef="let signal; let i=index;" style="width: 150px; height: 50px">
+                <app-chart [signal]="signal"></app-chart>
+            </mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+      
+            <mat-cell *matCellDef="let signal; let i=index;">
+              <button mat-icon-button color="accent" (click)="startEdit(signal._id)">
+                <mat-icon aria-label="Edit">edit</mat-icon>
+              </button>
+      
+              <button mat-icon-button color="accent" (click)="deleteItem(signal._id)">
+                <mat-icon aria-label="Delete">delete</mat-icon>
+              </button>
+            </mat-cell>
+        </ng-container>
+  
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  
+    </mat-table>
+  
+    <mat-paginator [length]="dataSource.signalsLength" [pageSize]="10" [pageSizeOptions]="[3, 5, 10]"></mat-paginator>
+  
+  </div>
+  
